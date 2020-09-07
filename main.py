@@ -8,7 +8,8 @@ if __name__ == "__main__":
     print(start.getOpenedFile().getNmbOfStates)
     print(start.getOpenedFile().getNmbOfEdges)
     print(start.getOpenedFile().getMatrix)
-
+    print(start.getOpenedFile().getStart)
+    print(start.getOpenedFile().getEnds)
 
     
 

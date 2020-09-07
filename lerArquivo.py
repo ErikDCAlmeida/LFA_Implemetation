@@ -7,6 +7,8 @@ class LerArquivo:
         self.__nmbOfStates = 0
         self.__nmbOfEdges = 0
         self.__file = None
+        self.__start = None
+        self.__ends = []
         self.__arrState = []
         self.__arrEdges = []
         self.__arrOfAlphaAuto = []
@@ -25,8 +27,9 @@ class LerArquivo:
                 if state == index:
                     return True
         return False
-
+    
     def getAutomatonInfo(self):
+        self.__enfOfTransitions = False
         self.__file = self.__loadFile()
         for line in self.__file.readlines():
             rsltLine = line.split(";")
@@ -39,12 +42,12 @@ class LerArquivo:
                         continue
                     else:
                         self.__arrOfAlphaAuto.append(item)
-            else:
+            else:                
                 if rsltLine[0] == ".":
                     self.__nmbOfStates = len(self.__arrState)
                     self.__nmbOfEdges = len(self.__arrEdges)
-                    break
-                else:
+                    self.__enfOfTransitions = True
+                elif self.__enfOfTransitions == False:
                     vetAux = []
                     vetAux.append(rsltLine[0])
                     vetAux.append(rsltLine[1])
@@ -59,8 +62,14 @@ class LerArquivo:
                     if self.__verifArrAuto(rsltLine[0]) == False:
                         self.__arrState.append(rsltLine[0])
                     self.__arrEdges.append(rsltLine[1])
+                elif self.__enfOfTransitions == True:
+                    if rsltLine[1] == "<":
+                        self.__ends.append(rsltLine[0])
+                    elif rsltLine[1] == ">":
+                        self.__start = rsltLine[0]
+                elif rsltLine[0] == []:
+                    break
 
-                
     @property
     def getNmbOfStates(self):
         return self.__nmbOfStates
@@ -80,3 +89,7 @@ class LerArquivo:
     @property
     def getStart(self):
         return self.__start
+
+    @property
+    def getEnds(self):
+        return self.__ends

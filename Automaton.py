@@ -66,7 +66,6 @@ class Automaton:
         while len(states_analise) != 0:
             actual_state = states_analise.pop(0)
             new_states_processed,new_transitions_processed = self.__get_new_states__(actual_state,new_states)
-            converted_graph.add_vertice(Vertice(actual_state.id))
             new_states[actual_state.id] = [transition for transition in new_transitions_processed]
             for new_state_found in new_states_processed:
                 if not self.__verify_states_in_new_states__(new_states,new_state_found):
@@ -74,6 +73,9 @@ class Automaton:
 
         # Adicionando as transicoes  no novo automato convertido. As transicoes sao adicionadas apos todos os
         # estados terem sido adicionados pois caso contrario poderiamos ter transicoes que nao apontam para nenhum estado
+        for key in new_states:
+            converted_graph.add_vertice(Vertice(key))
+
         for key in new_states:
             actual_transitions = new_states[key]
             for transition in actual_transitions:

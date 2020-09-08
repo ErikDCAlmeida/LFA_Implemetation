@@ -1,5 +1,8 @@
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
+from Automaton import Automaton
+from Graph.vertice import Vertice
+from Graph.aresta import Aresta
 
 class LerArquivo:
 
@@ -15,9 +18,9 @@ class LerArquivo:
         self.__matrixOfLines = []
 
     def __loadFile(self):
-        Tk().withdraw()
-        fileName = askopenfilename()
-        return open(fileName, "r")
+        #Tk().withdraw()
+        #fileName = askopenfilename()
+        return open("teste_nfa.txt", "r")
          
     def __verifArrAuto(self, state):
         if len(self.__arrState) == 0:
@@ -31,8 +34,9 @@ class LerArquivo:
     def getAutomatonInfo(self):
         self.__enfOfTransitions = False
         self.__file = self.__loadFile()
-        for line in self.__file.readlines():
-            rsltLine = line.split(";")
+        lines = self.__file.readlines()
+        for index in range(0,len(lines)):
+            rsltLine = lines[index].split(";")
             if rsltLine[0] == "{":
                 for item in rsltLine:
                     if item == "}":
@@ -69,6 +73,16 @@ class LerArquivo:
                         self.__start = rsltLine[0]
                 elif rsltLine[0] == []:
                     break
+        
+        return self.__generate_automaton__()
+            
+
+    def __generate_automaton__(self):
+        automaton = Automaton(alphabet=self.__arrOfAlphaAuto,states=[Vertice(state) for state in self.__arrState],nmbOfStates=self.__nmbOfStates,initial_state=Vertice(self.__start),final_states=[Vertice(state) for state in self.__ends])
+        for transition in self.__matrixOfLines:
+            automaton.add_transition(Aresta(vertice_inicio=Vertice(transition[0]),vertice_fim=Vertice(transition[2]),id=transition[1]))
+
+        return automaton
 
     @property
     def getNmbOfStates(self):

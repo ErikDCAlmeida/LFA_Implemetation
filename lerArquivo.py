@@ -18,9 +18,9 @@ class LerArquivo:
         self.__matrixOfLines = []
 
     def __loadFile(self):
-        #Tk().withdraw()
-        #fileName = askopenfilename()
-        return open("teste_nfa.txt", "r")
+        Tk().withdraw()
+        fileName = askopenfilename()
+        return open(fileName, "r")
          
     def __verifArrAuto(self, state):
         if len(self.__arrState) == 0:
